@@ -1,0 +1,47 @@
+
+Dumb edge cases: 
+
+ls -
+'-' is treated like a file 
+Output: '-' No such file or directory
+
+if option '--' given it's just ignored 
+ls --
+
+^ done
+
+
+crawl tree needs to be redone to properly handle hidden folders: done 
+
+ls should print files first and then directory sorted by alphabet: done 
+
+new_get_args needs to remove the node whos contents are set to null
+so that the sorting function doesn't segfault trying to access it: done
+
+
+I need to rename the ft_ls dir to something else so it doesn't conflict with the
+required name of the resulting binary: done
+
+need a wrapper function for handling directories that must take a string: done
+
+need a wrapper function for handling files that must take a t_dir_info struct: done 
+
+if there are multiple args from the command line and one is an empty dir
+a segfault occurs : done 
+
+get_dir_list uses lstat but I may need to change it back to stat: done 
+watch and make sure no error are caused by this!
+
+Need to do housekeeping in the header: done
+
+Program segfaults if the recursive process encounters a dir it can't open: fixed and done
+
+my -t flag seems to need re-adjustment as it does not match ls output: done
+
+Program need to exit on a bad flag e.g. ./ft_ls -z "z not recognized"
+
+make printing functs
+
+
+In get_dir_list removed:
+if( !node ) node = ft_lstnew( dir_info ...
