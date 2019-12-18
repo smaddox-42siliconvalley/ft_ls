@@ -18,7 +18,6 @@ ls should print files first and then directory sorted by alphabet: done
 new_get_args needs to remove the node whos contents are set to null
 so that the sorting function doesn't segfault trying to access it: done
 
-
 I need to rename the ft_ls dir to something else so it doesn't conflict with the
 required name of the resulting binary: done
 
@@ -45,22 +44,24 @@ make printing functs: done
 displaying datetime seems to incorrectly display last access time instead
 of last modification time regardless of struct stat member used: done
 
+count_blocks doesn't correctly match the output of ls -l ( total x ): done
+solution: gnu ls uses a blocksize of 1024 instead of the 512 that stat's st_blocks uses 
+
+program segfaults on ./run -R / the segfault occurs during a ft_strcmp call: done
+solution: s1 set to TDI(lst, path) instead of TDI(lst, entry -> d_name) in crawl_tree
+
 
 ----------------------------------------------------------------------------------------
 
+program needs to throw error message if file supplied at command line doesn't exist
+
 dev_printf prints garbage if the a 0 is supplied to the %d flag
 
-program segfaults on ./run -R / the segfault occurs during a ft_strcmp call
 
-count_blocks doesn't correctly match the output of ls -l ( total x )
 
 
 notes about comments:
 metacomment! remove them before norming
-
-notes about total block size of a dir:
-can't find a correlation between the size of the files in bytes and the
-supposed number of the 512 blocks that make them up
 
 changes:
 The -l flag no longer sets the DIRPATH flag (postProcOpts)

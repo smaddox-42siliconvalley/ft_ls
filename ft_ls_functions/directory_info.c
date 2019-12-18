@@ -14,6 +14,7 @@ t_list *dir_list( char *path, t_options opts )
 	return( list );
 }
 
+/*
 static void	setNames(char *path, t_dir_info *dir, char *d_name)
 {
 	dir->path_ref = ft_strdup( path );
@@ -27,6 +28,21 @@ static void	setNames(char *path, t_dir_info *dir, char *d_name)
 		free(path);
 	}
 }
+*/
+
+static void	setNames(char *path, t_dir_info *dir, char *d_name)
+{
+	char fullpath[255];
+	
+	ft_bzero(fullpath, 255);
+	ft_strcpy(fullpath, path);
+	dir->path_ref = ft_strdup(path);
+	dir->print_name = ft_strdup(dir->entry->d_name);
+	if((path)[ft_strlen(path) - 1] != '/')
+		ft_strcat(fullpath, "/");
+	ft_strcat(fullpath, dir->print_name);
+	dir->path = ft_strdup(fullpath);
+}
 
 t_list *get_dir_list( char *path, t_options opts )
 {
@@ -34,7 +50,6 @@ t_list *get_dir_list( char *path, t_options opts )
 	t_dir_info	dir_info;
 	t_list		*node;
 
-	static int i = 0;
 	node = NULL;
 	if(!(directory = opendir(path)))
 	{	
@@ -49,7 +64,6 @@ t_list *get_dir_list( char *path, t_options opts )
 		setNames(path, &dir_info, dir_info.entry->d_name);
 		if(lstat(dir_info.path, &(dir_info.status)) != -1)
 			ft_lstPush(&node, &dir_info, sizeof(t_dir_info));
-
 	}
 	closedir(directory);
 	return(node);
@@ -62,7 +76,7 @@ void	crawl_tree( t_list *lst, t_lstQ *queue, t_options opts )
 
 	while(lst)
 	{
-		s1 = TDI(lst, entry->d_name);
+		s1 = TDI(lst, path);
 		if(S_ISDIR(TDI(lst, status.st_mode)))
 		{
 			if(!(ft_strcmp(s1, ".") == 0 || 

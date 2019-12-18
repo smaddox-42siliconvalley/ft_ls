@@ -10,7 +10,7 @@ void	dir_print( t_list *node, t_options opts)
 		ft_printf("%s:\n", T_NODE( t_dir_info*, node, path_ref ));
 	if (opts.flags & LFORMAT)
 		ft_printf("total %d\n", count_blocks(node));
-	//ft_lstiter(node, opts.prnt);
+	ft_lstiter(node, opts.prnt);
 	if ( opts.flags & DIRPATH )
 		ft_printf("\n");
 }

@@ -21,6 +21,8 @@ static void		getInfo( t_list *node )
 	else
 	{
 		//error handling here
+		ft_printf("ls: cannot access '%s': %s\n",
+		(char*)(node->content), strerror(errno));
 		node -> content = NULL;
 	}
 }
@@ -47,6 +49,8 @@ void		ls_init( char **av, t_list **args, t_options *options  )
 	}
 	if ( num_args > 1 )
 		(options -> flags) |= DIRPATH;
+	if(num_args == 0)
+		(options->flags) |= NOARGS; 
 	postProcOpts( options );
 	ft_lstiter( *args, &getInfo );
 	ft_lst_rm_if( args, &checkfornull, &free );

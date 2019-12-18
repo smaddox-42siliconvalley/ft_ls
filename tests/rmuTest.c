@@ -28,7 +28,7 @@ void	handle_dir( char *path, t_options opts )
 
 void	handleArgs( t_list *args, t_options opts )
 {
-	if ( args == NULL )
+	if ( opts.flags & NOARGS )
 		handle_dir(".", opts);
 	while( args )
 	{
@@ -54,7 +54,6 @@ int	count_blocks(t_list *node)
 
 	while( node )
 	{
-		ft_printf("%s: %d\n", TDI(node, print_name), TDI(node, status.st_blocks));
 		blocks += TDI(node, status.st_blocks);
 		node = node -> next;
 	}
@@ -69,10 +68,8 @@ int main(int ac, char **av)
 
 	args = NULL;
 	ft_bzero(&opts, sizeof(t_options));
-	ls_init( (av + 1), &args, &opts );
-	//handleArgs( args, opts );
-	t_list *node = get_dir_list(".", opts);
-	ft_printf("%d\n", count_blocks(node));
+	ls_init((av + 1), &args, &opts);
+	handleArgs( args, opts );
 }
 
 /*
