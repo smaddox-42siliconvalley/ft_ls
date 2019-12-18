@@ -1,4 +1,5 @@
 #include "directory_info.h"
+#include "time.h"
 
 void	handle_dir( char *path, t_options opts )
 {
@@ -19,6 +20,8 @@ void	handle_dir( char *path, t_options opts )
 		{
 			dir_print( temp, opts );
 			//delete everything 
+			//testing
+			ft_lstdel( &temp, &tdi_clean );
 		}
 	}
 }
@@ -39,7 +42,23 @@ void	handleArgs( t_list *args, t_options opts )
 
 void temp_print( t_list *node )
 {
-	ft_printf("%s\n", T_NODE( t_dir_info*, node, print_name));
+	//ft_printf("%s\n", T_NODE( t_dir_info*, node, print_name));
+	ft_printf("%s\n", T_NODE( t_dir_info*, node, path_ref));
+}
+
+int	count_blocks(t_list *node)
+{
+	int blocks;
+
+	blocks = 0;
+
+	while( node )
+	{
+		ft_printf("%s: %d\n", TDI(node, print_name), TDI(node, status.st_blocks));
+		blocks += TDI(node, status.st_blocks);
+		node = node -> next;
+	}
+	return(blocks);
 }
 
 int main(int ac, char **av)
@@ -51,9 +70,9 @@ int main(int ac, char **av)
 	args = NULL;
 	ft_bzero(&opts, sizeof(t_options));
 	ls_init( (av + 1), &args, &opts );
-	//t_list *node = dir_list(".", opts);
-	//ft_lstiter( node, &temp_print );
-	handleArgs( args, opts );
+	//handleArgs( args, opts );
+	t_list *node = get_dir_list(".", opts);
+	ft_printf("%d\n", count_blocks(node));
 }
 
 /*

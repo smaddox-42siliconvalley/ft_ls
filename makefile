@@ -3,9 +3,9 @@ NAME = run
 CFILES = \
 ft_ls_functions/general_utility.c\
 ft_ls_functions/directory_info.c\
-ft_ls_functions/flags.c\
 ft_ls_functions/parsing.c\
 ft_ls_functions/printing.c\
+ft_ls_functions/cleaning.c
 
 OFILES = $(CFILES:%.c=%.o)
 
@@ -21,4 +21,5 @@ all : $(OFILES)
 %.o : %.c
 	gcc $(CFLAGS) $(INCLUDES) -c $< -o $@
 
-
+clean :
+	rm $(OFILES)

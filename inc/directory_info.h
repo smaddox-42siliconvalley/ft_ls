@@ -57,6 +57,7 @@ void			crawl_tree( t_list *lst, t_lstQ *queue, t_options opts );
 /*	utility	*/
 int			checkfornull( void *data );
 int			checkpathend( char *str );
+int			count_blocks( t_list *node );
 
 /* special comparison funcs for sorting */
 
@@ -70,10 +71,14 @@ void	dir_print( t_list *node, t_options opts );
 void	long_format_print( t_list *node );
 void	default_print( t_list *node );
 
-
 /*	Parsing and option handling	*/
 
 void	ls_init( char **av, t_list **args, t_options *options );
 void	postProcOpts( t_options *optstruct );
 void	flag_set( char *str, unsigned int *flag );
 void	add_args( char *str, t_list **args );
+
+
+/*	cleaning */
+
+void	tdi_clean( void *data, size_t size);

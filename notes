@@ -38,10 +38,29 @@ Program segfaults if the recursive process encounters a dir it can't open: fixed
 
 my -t flag seems to need re-adjustment as it does not match ls output: done
 
-Program need to exit on a bad flag e.g. ./ft_ls -z "z not recognized"
+Program needs to exit on a bad flag e.g. ./ft_ls -z "z not recognized": done
 
-make printing functs
+make printing functs: done
+
+displaying datetime seems to incorrectly display last access time instead
+of last modification time regardless of struct stat member used: done
 
 
-In get_dir_list removed:
-if( !node ) node = ft_lstnew( dir_info ...
+----------------------------------------------------------------------------------------
+
+dev_printf prints garbage if the a 0 is supplied to the %d flag
+
+program segfaults on ./run -R / the segfault occurs during a ft_strcmp call
+
+count_blocks doesn't correctly match the output of ls -l ( total x )
+
+
+notes about comments:
+metacomment! remove them before norming
+
+notes about total block size of a dir:
+can't find a correlation between the size of the files in bytes and the
+supposed number of the 512 blocks that make them up
+
+changes:
+The -l flag no longer sets the DIRPATH flag (postProcOpts)

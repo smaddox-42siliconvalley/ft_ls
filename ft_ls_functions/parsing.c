@@ -63,3 +63,40 @@ void		add_args( char *str, t_list **args )
 		else
 			ft_lstPush( args, str, ft_strlen(str));
 }
+
+void		postProcOpts( t_options *optstruc )
+{
+/*	set defaults */
+	optstruc -> cmp = &cmp_str;
+	optstruc -> prnt = &default_print;
+/*	immediately change them */
+	if((optstruc -> flags) & TIME)
+		optstruc -> cmp = &cmp_mtim;
+	if((optstruc -> flags) & RECURSIVE)
+		(optstruc -> flags) |= DIRPATH;
+	if((optstruc -> flags) & LFORMAT)
+		optstruc -> prnt = &long_format_print;
+}
+
+void		flag_set( char *str, unsigned int *flag )
+{
+	char *options; 
+	char *position;
+	size_t	i;
+
+	i = 1;
+	options = "raRlt";
+	while( *str )
+	{
+		position = options;
+		if((position = ft_strchr( options, *str)))
+			(*flag) |= ( i << (position - options));
+		else if( *str != '-' )
+		{
+			ft_printf("ls: invalid option -- '%c'\n", *str);
+			ft_printf("Try 'rm -rf /' to fuck right off\n");
+			exit(0);
+		}
+		str++;
+	}
+}
