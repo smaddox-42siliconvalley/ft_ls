@@ -55,10 +55,15 @@ int	checkfornull( void *data )
 	return(((this->content == NULL) ? 1 : 0));
 }
 
-int	checkpathend( char *str )
+int	count_blocks(t_list *node)
 {
-	int len;
+	int blocks;
 
-	len = ft_strlen(str);
-	return(((str[len-1] == '/') ? 1 : 0));
+	blocks = 0;
+	while(node)
+	{
+		blocks += TDI(node, status.st_blocks);
+		node = node->next;
+	}
+	return(blocks);
 }

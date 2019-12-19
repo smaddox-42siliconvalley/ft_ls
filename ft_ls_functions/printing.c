@@ -6,12 +6,12 @@
 
 void	dir_print( t_list *node, t_options opts)
 {
-	if ( opts.flags & DIRPATH )
+	if (opts.flags & DIRPATH)
 		ft_printf("%s:\n", T_NODE( t_dir_info*, node, path_ref ));
 	if (opts.flags & LFORMAT)
 		ft_printf("total %d\n", count_blocks(node));
 	ft_lstiter(node, opts.prnt);
-	if ( opts.flags & DIRPATH )
+	if(!(opts.flags & LFORMAT))
 		ft_printf("\n");
 }
 
@@ -53,7 +53,11 @@ void	print_mode( mode_t mode )
 	}
 	buf[10] = '\0';
 	if (mode & S_ISVTX)
-		buf[8] = (mode & S_IXOTH) ? 't' : 'T';
+		buf[8] = (S_ISDIR(mode)) ? 't' : 'T';
+	if (mode & S_ISUID)
+		buf[2] = (S_ISDIR(mode)) ? 's' : 'S';
+	if(mode & S_ISGID)
+		buf[5] = (S_ISDIR(mode)) ? 's' : 'S';
 	ft_printf("%s ", buf);
 }
 
@@ -64,14 +68,6 @@ void	get_datetime(struct stat status)
 	char *str;
 	time_t ttime;
 
-/*
-	if(S_ISDIR(status.st_mode))
-		ttime = time(&status.st_ctime);
-	else
-		ttime = time(&status.st_mtime);
-*/
-	//ttime = time(&status.st_mtime);
-	//str = ctime(&ttime);
 	str = ctime( &status.st_mtime );
 	strings = ft_strsplit(str, ' ');
 	// Super lazy formatting 
@@ -79,7 +75,8 @@ void	get_datetime(struct stat status)
 	strncpy((strings[3] + (ft_strlen(strings[3]) - 3)), "\0\0\0", 3);
 	strncpy((strings[4] + (ft_strlen(strings[4]) - 1)), "\0", 1);
 	ft_printf("%s %2s %s ", strings[1], strings[2],
-	((time(NULL) - status.st_mtime) >= 15552000) ? strings[4] : strings[3]);	
+	((time(NULL) - status.st_mtime) >= 15552000)
+	? strings[4] : strings[3]);	
 	while( *strings )
 	{
 		free(*strings);
@@ -113,9 +110,3 @@ void	default_print( t_list *node )
 	return;
 }
 
-/* tudu:
-	for dir_print display total block size
-	
-	ft_printf("%s: %s: %ld\n", TDI(node, print_name), str, TDI(node, status.st_mtim.tv_nsec));
-
-*/
