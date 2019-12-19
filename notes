@@ -1,5 +1,5 @@
 
-Dumb edge cases: 
+Dumb edge case: 
 
 ls -
 '-' is treated like a file 
@@ -50,13 +50,19 @@ solution: gnu ls uses a blocksize of 1024 instead of the 512 that stat's st_bloc
 program segfaults on ./run -R / the segfault occurs during a ft_strcmp call: done
 solution: s1 set to TDI(lst, path) instead of TDI(lst, entry -> d_name) in crawl_tree
 
+program needs to throw error message if file supplied at command line doesn't exist:done
+
+dev_printf prints garbage if the a 0 is supplied to the %d flag: done 
+solution: 0 was an edge case I didn't account for and somehow it didn't come up in
+corrections or moulinette's grading 
 
 ----------------------------------------------------------------------------------------
 
-program needs to throw error message if file supplied at command line doesn't exist
+general cleanup
 
-dev_printf prints garbage if the a 0 is supplied to the %d flag
+check for leaks
 
+norme
 
 
 

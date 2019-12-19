@@ -1,5 +1,0 @@
-#!/bin/bash
-echo "Real:"
-ls -l $1 | head -1
-echo "Program:"
-./run $1
