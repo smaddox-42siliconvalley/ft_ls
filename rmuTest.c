@@ -1,5 +1,32 @@
 #include "directory_info.h"
-#include "time.h"
+
+void	handle_dir( char *path, t_options opts )
+{
+	
+	t_lstQ		queue;
+	t_list		*node;
+	t_list		*temp;
+
+	queue = ft_newlstQueue();
+	node = dir_list(path, opts);
+	if (node)
+	{
+		dir_print( node, opts );
+		if ( node && opts.flags & RECURSIVE )
+		{
+			crawl_tree( node, &queue, opts );
+			while (( temp = (t_list*)(ft_lstDQ( &queue ))))
+			{
+				ft_printf("\n");
+				dir_print( temp, opts );
+				ft_lstdel( &temp, &tdi_clean );
+			}
+		}
+	}
+	else if(opts.flags & DIRPATH)
+		ft_printf("%s:\n", path);
+}
+/*
 
 void	handle_dir( char *path, t_options opts )
 {
@@ -11,53 +38,63 @@ void	handle_dir( char *path, t_options opts )
 	queue = ft_newlstQueue();
 	node = dir_list(path, opts);
 	if (!node )
+	{
+		if(opts.flags & DIRPATH)
+			ft_printf("%s:\n", path);
 		return;
+	}
 	dir_print( node, opts );
-	if ( opts.flags & RECURSIVE )
+	if ( node && opts.flags & RECURSIVE )
 	{
 		crawl_tree( node, &queue, opts );
 		while (( temp = (t_list*)(ft_lstDQ( &queue ))))
 		{
+			ft_printf("\n");
 			dir_print( temp, opts );
-			//delete everything 
-			//testing
 			ft_lstdel( &temp, &tdi_clean );
 		}
 	}
 }
-
-void	handleArgs( t_list *args, t_options opts )
+*/
+void	handleArgs(t_list *args, t_options opts)
 {
-	if ( opts.flags & NOARGS )
+	int files;
+
+	files = 0;
+	if(opts.flags & NOARGS)
 		handle_dir(".", opts);
-	while( args )
+	while(args && !S_ISDIR(TDI(args, status.st_mode)))
 	{
-		if(S_ISDIR(T_NODE( t_dir_info*, args, status.st_mode )))
-			handle_dir(T_NODE(t_dir_info*, args, path), opts);
-		else	
-			opts.prnt(args);
-		args = args -> next;
+		files = 1;
+		opts.prnt(args);
+		args = args->next;
+	}
+	if(files)
+		ft_printf("%s",
+		(args && !(opts.flags & LFORMAT)) ? "\n\n" : "\n");
+	while(args && S_ISDIR(TDI(args, status.st_mode)))
+	{
+		handle_dir(TDI(args, path), opts);
+		if(args->next)
+			ft_printf("\n");
+		args = args->next;
 	}
 }
+// returns 1 on "*/." and "*/.."
 
-void temp_print( t_list *node )
+int	loldont(char *path)
 {
-	//ft_printf("%s\n", T_NODE( t_dir_info*, node, print_name));
-	ft_printf("%s\n", T_NODE( t_dir_info*, node, path_ref));
-}
+	int	n;
+	char	**strings;
 
-int	count_blocks(t_list *node)
-{
-	int blocks;
-
-	blocks = 0;
-
-	while( node )
+	strings = ft_strsplit(path, '/');
+	while(*strings && *(strings + 1))
 	{
-		blocks += TDI(node, status.st_blocks);
-		node = node -> next;
+		free(*strings);
+		strings++;
 	}
-	return(blocks);
+
+	return(!(ft_strequ(*strings, ".") || ft_strequ(*strings, "..")));
 }
 
 int main(int ac, char **av)
@@ -70,29 +107,5 @@ int main(int ac, char **av)
 	ft_bzero(&opts, sizeof(t_options));
 	ls_init((av + 1), &args, &opts);
 	handleArgs( args, opts );
+	//ft_printf("%d\n", loldont(av[1]));
 }
-
-/*
-int main(int ac, char **av)
-{
-	t_list		*opts;
-	t_list		*args;
-	unsigned int	shit;
-
-
-	args = NULL;
-	opts = NULL;
-	//new_get_args( av, &args, &opts );
-	flag_stepper( av[1], &shit );
-	printf("%u\n", shit);
-	return(0);
-
-	ls_print( node, opts );
-	while (( temp = (t_list*)ft_lstDQ( &queue )))
-	{
-		ft_printf("\n--------------------------------------------\n");
-		ls_print( temp, opts );
-	}
-		ft_printf("\n--------------------------------------------\n");
-}
-*/
